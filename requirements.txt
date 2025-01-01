@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+passlib
+python-dotenv
+greenlet
+bcrypt
+langchain
+langchain_ollama
+langchain_chroma
+langchain-community
+uuid
+beautifulsoup4
