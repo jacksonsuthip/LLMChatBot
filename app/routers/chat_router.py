@@ -1,7 +1,9 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, status
-from app.schemas.chat_schema import DeleteUrlResponseSchema, DeleteUrlSchema, IngestUrlResponseSchema, IngestUrlSchema, QueryUrlResponseSchema, QueryUrlSchema
-from app.services.chat_service import delete_url, ingest_url, query_url
+from fastapi.responses import StreamingResponse
+from app.schemas.chat_schema import DeleteUrlResponseSchema, DeleteUrlSchema, GetUrlsResponse, IngestUrlResponseSchema, IngestUrlSchema, QueryUrlResponseSchema, QueryUrlSchema
+from app.services.chat_service import delete_url, get_all_urls, ingest_url, query_url
+from app.utils.chat import chatUrlStream
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
@@ -23,9 +25,25 @@ async def Query_url_endpoint(query:QueryUrlSchema) -> QueryUrlResponseSchema:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 @router.post("/delete_url")
-async def Delete_url_endpoint(delete:DeleteUrlSchema):
+async def Delete_url_endpoint(delete:DeleteUrlSchema) -> DeleteUrlResponseSchema:
     try:
         result = await delete_url(delete)
         return result
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+@router.get("/get_urls")
+async def Get_urls_endpoint() -> List[GetUrlsResponse]:
+    try:
+        result = await get_all_urls()
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+@router.get("/query_url_stream/{query}/{model}/{temperature}")
+async def Query_url_stream_endpoint(query, model, temperature):
+    try:
+        return StreamingResponse(chatUrlStream(query, model, temperature), media_type="text/event-stream")
+         
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

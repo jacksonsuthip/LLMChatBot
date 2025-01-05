@@ -162,3 +162,23 @@ def delete_url_db(url):
     
     except Exception as e:
         return {"message": f"Error deleting records", "unique_id": url_hash, "source": url}
+
+def get_all_urls_db():
+    try:
+        response = vector_store.get(
+            limit=1000,
+            offset=0
+        )
+
+        seen_sources = set()
+        unique_data = []
+
+        for metadata in response["metadatas"]:
+            if metadata['unique_id'] not in seen_sources:
+                unique_data.append(metadata)
+                seen_sources.add(metadata['unique_id'])
+
+        return unique_data
+    
+    except Exception as e:
+        return {"message": f"Error retrieving documents: {str(e)}"}

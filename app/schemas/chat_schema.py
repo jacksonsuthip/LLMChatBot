@@ -4,6 +4,7 @@ from pydantic import BaseModel, model_validator
 
 class LlmModelEnum(str, Enum):
     llama3_2_1b = "llama3.2:1b"
+    llama3_8b = "llama3:8b"
     phi3_3_8b = "phi3:3.8b"
     mistral = "mistral"
 
@@ -60,3 +61,16 @@ class DeleteUrlResponseSchema(BaseModel):
     message: str
     unique_id: str
     source: str
+
+class GetUrlsResponse(BaseModel):
+    id: str
+    language: str
+    source: str
+    title: str
+    unique_id: str
+
+# class QueryUrlSchema(BaseModel):
+#     history: Optional[List[ChatHistorySchema]] = None
+#     query: str
+#     model: LlmModelEnum
+#     temperature: float
