@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
-from app.routers import chat_router
-from app.database import init_db
+from app.routers import chat_router, chat_sql_router
+from app.database import init_db, SessionLocal
 from fastapi.middleware.cors import CORSMiddleware
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
         print("Application startup")
-        # await init_db()
+        await init_db()
     except Exception as e:
         print(f"Error during startup: {e}")
         raise e
@@ -32,8 +32,13 @@ app.add_middleware(
 )
 
 app.include_router(chat_router.router)
+app.include_router(chat_sql_router.router)
 
 # Test Route for Basic Testing
 @app.get("/test")
 async def Test_endpoint():
     return {"message": "This is a test endpoint"}
+
+async def get_db():
+    async with SessionLocal() as db:
+        yield db
