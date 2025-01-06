@@ -10,5 +10,6 @@ langchain
 langchain_ollama
 langchain_chroma
 langchain-community
+langchain_experimental
 uuid
 beautifulsoup4
