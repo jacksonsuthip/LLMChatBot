@@ -1,4 +1,5 @@
 from langchain_ollama import OllamaEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 
 class EmbeddingModels:
     def __init__(self):
@@ -10,3 +11,7 @@ class EmbeddingModels:
         self.nomic_embeddings_ollama = OllamaEmbeddings(
             model="nomic-embed-text"
         )
+
+        # self.HuggingFaceEmbeddings_sentence_transformers = HuggingFaceEmbeddings(
+        #     model_name='sentence-transformers/all-MiniLM-L6-v2'
+        # )
