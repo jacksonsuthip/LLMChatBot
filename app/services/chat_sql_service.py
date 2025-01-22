@@ -120,3 +120,15 @@ async def delete_query_sql():
     
     except Exception as e:
         return {"message": f"Error deleting records: {str(e)}", "collection_name": COLLECTION_NAME_SQL}
+    
+async def get_db_query_sql_endpoint(count):
+    try:
+        results = vector_store.get()
+        
+        # metadata_list = [result.metadata for result in results]
+
+        return results
+
+    except Exception as e:
+        print(f"An error occurred while fetching metadata: {e}")
+        return None
