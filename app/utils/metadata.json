@@ -1,0 +1,26 @@
+[
+    {
+      "Answer": "db.m5.large, aws-lambda-xyz, ddb-table-prod, t2.micro, StandardStorage",
+      "Question": "List services",
+      "SQLQuery": "SELECT service_name FROM cost GROUP BY service_name UNION ALL SELECT service_name FROM performance GROUP BY service_name;",
+      "SQLResult": "[('db.m5.large',), ('aws-lambda-xyz',), ('ddb-table-prod',), ('t2.micro',), ('StandardStorage',), ('db.m5.large',), ('aws-lambda-xyz',), ('ddb-table-prod',), ('t2.micro',), ('StandardStorage',)]"
+    },
+    {
+      "Answer": "1. CPU Usage: 70.50%, Memory Usage: 50.00%, Response Time: 180.00 ms; 2. CPU Usage: 75.00%, Memory Usage: 52.50%, Response Time: 175.00 ms; 3. CPU Usage: 78.00%, Memory Usage: 55.00%, Response Time: 170.00 ms",
+      "Question": "What is the performance of t2.micro?",
+      "SQLQuery": "SELECT service_name, cpu_usage, memory_usage, response_time FROM performance WHERE service_name = 't2.micro' LIMIT 5;",
+      "SQLResult": "[('t2.micro', Decimal('70.50'), Decimal('50.00'), Decimal('180.00')), ('t2.micro', Decimal('75.00'), Decimal('52.50'), Decimal('175.00')), ('t2.micro', Decimal('78.00'), Decimal('55.00'), Decimal('170.00'))]"
+    },
+    {
+      "Answer": "1. Date: 2025-01-19, Recommendation: Consider downgrading to db.t3.medium for lower performance requirements, Priority: High; 2. Date: 2025-01-20, Recommendation: Consider downgrading to db.t3.medium if performance continues to be stable, Priority: High; 3. Date: 2025-01-21, Recommendation: Consider downgrading to db.t3.medium if memory usage stays stable, Priority: High",
+      "Question": "What is the recommendation for db.m5.large?",
+      "SQLQuery": "SELECT * FROM recommendation WHERE service_name = 'db.m5.large';",
+      "SQLResult": "[(4, 'db.m5.large', datetime.date(2025, 1, 19), 'Consider downgrading to db.t3.medium for lower performance requirements', 'High'), (5, 'db.m5.large', datetime.date(2025, 1, 20), 'Consider downgrading to db.t3.medium if performance continues to be stable', 'High'), (6, 'db.m5.large', datetime.date(2025, 1, 21), 'Consider downgrading to db.t3.medium if memory usage stays stable', 'High')]"
+    },
+    {
+      "Answer": "1. CPU Usage: 45.00%; 2. CPU Usage: 50.00%; 3. CPU Usage: 52.50%",
+      "Question": "What is the CPU performance of aws-lambda-xyz?",
+      "SQLQuery": "SELECT service_name, cpu_usage FROM performance WHERE service_name = 'aws-lambda-xyz' LIMIT 5;",
+      "SQLResult": "[('aws-lambda-xyz', Decimal('45.00')), ('aws-lambda-xyz', Decimal('50.00')), ('aws-lambda-xyz', Decimal('52.50'))]"
+    }
+  ]
