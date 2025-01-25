@@ -13,7 +13,9 @@ langchain_ollama
 langchain_chroma
 langchain-community
 langchain_experimental
+langchain-groq
 uuid
 beautifulsoup4
 pydantic==2.9.2
-sentence-transformers
+torch>=1.11.0
+sentence-transformers>=2.6.0
