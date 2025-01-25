@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.engine import reflection
 import asyncpg
 
-async def get_table_info_1(DATABASE_URL):
+async def get_table_info_str(DATABASE_URL):
     # Using asyncpg to fetch the table info directly from PostgreSQL
     conn = await asyncpg.connect(DATABASE_URL)
     query = """

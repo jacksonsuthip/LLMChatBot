@@ -6,9 +6,9 @@ from langchain.schema import Document
 from langchain.prompts import FewShotPromptTemplate
 from langchain.chains.sql_database.prompt import PROMPT_SUFFIX, _postgres_prompt
 from langchain.prompts.prompt import PromptTemplate
-from app.config import COLLECTION_NAME_SQL, DATABASE_URL_LANGCHAIN, PERSIST_DIRECTORY_DB
+from app.config import COLLECTION_NAME_SQL, DATABASE_URL_LANGCHAIN, GROQ_CLOUD_API, PERSIST_DIRECTORY_DB
 from app.models.embedding_models import EmbeddingModels
-from app.models.llm_models import LlmModels
+from app.models.llm_models import LlmModels, LlmModelsGroq
 from app.utils.db_helper import get_table_info
 
 embeddingModels = EmbeddingModels()
@@ -42,28 +42,16 @@ async def save_query_sql(saveQuery):
 
 async def query_sql_1(query: str):
 
-    llmModels = LlmModels("llama3.2:1b", 0)
-    llm = llmModels.model_ollama
-
-    query_embedding = nomicEmbeddings.embed(query)
-
-    example_selector = SemanticSimilarityExampleSelector(
-        vectorstore=vector_store,
-        k=2,
-    )
-
-    # selector = example_selector.select_examples(query=query)
-
-    print(example_selector)
+    llmModels = LlmModelsGroq("gemma2-9b-it", 0.1, GROQ_CLOUD_API)
+    llm = llmModels.model_Groq
     
-    # db = SQLDatabase.from_uri(DATABASE_URL_LANGCHAIN)
+    db = SQLDatabase.from_uri(DATABASE_URL_LANGCHAIN)
 
-    # db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True)
+    db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True)
 
-    # result = await db_chain(query)
+    result = await db_chain.arun(query)
     
-    return "example_selector"
-
+    return result
 
 async def query_sql(query):
     llmModels = LlmModels("llama3:8b", 9)
