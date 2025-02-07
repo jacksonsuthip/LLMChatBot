@@ -5,8 +5,10 @@ from pydantic import BaseModel, model_validator
 class LlmModelEnum(str, Enum):
     llama3_2_1b = "llama3.2:1b"
     llama3_8b = "llama3:8b"
+    mistral_7b = "mistral:7b"
+    gemma_7b = "gemma:7b"
     phi3_3_8b = "phi3:3.8b"
-    mistral = "mistral"
+    phi4_14b = "phi4:14b"
 
 class IngestUrlSchema(BaseModel):
     urls: list[str]
