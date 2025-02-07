@@ -6,10 +6,10 @@ from app.services.chat_sql_service import delete_query_sql, get_db_query_sql_end
 
 router = APIRouter(prefix="/chat-sql", tags=["Chat-sql"])
 
-@router.get("/query_sql/{query}")
-async def Query_sql_endpoint(query):
+@router.get("/query_sql/{query}/{model}/{temperature}")
+async def Query_sql_endpoint(query, model, temperature):
     try:
-        result = await query_sql(query)
+        result = await query_sql(query, model, temperature)
         return result
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
