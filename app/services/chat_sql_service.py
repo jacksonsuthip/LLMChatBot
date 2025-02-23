@@ -54,8 +54,13 @@ async def query_sql_1(query: str):
     return result
 
 async def query_sql(query, model, temperature):
-    llmModels = LlmModels(model, temperature)
-    llm = llmModels.model_ollama
+    # llmModels = LlmModels(model, temperature)
+    # llm = llmModels.model_ollama
+    # llama-3.3-70b-versatile
+
+    llmModels = LlmModelsGroq("gemma2-9b-it", 0.1, GROQ_CLOUD_API)
+    llm = llmModels.model_Groq
+
 
     db = SQLDatabase.from_uri(DATABASE_URL_LANGCHAIN)
     
@@ -94,7 +99,7 @@ async def query_sql(query, model, temperature):
         Question: Question here
         SQLQuery: SQL Query to run
         SQLResult: Result of the SQLQuery
-        Answer: SQL Query to run
+        Answer: Only SQLQuery
 
         """
 
@@ -106,13 +111,19 @@ async def query_sql(query, model, temperature):
         input_variables=["input", "table_info", "top_k"],
     )
 
-    db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True, prompt=few_shot_prompt)
+    db_chain = SQLDatabaseChain.from_llm(llm, db, verbose=True, prompt=few_shot_prompt, return_sql=True, return_direct=True)
 
     # result = await db_chain.acall({"query": query, "table_info": table_info})
     # result = await db_chain.acall(query)
     result = await db_chain.ainvoke(query)
 
-    return result
+    result1 = result.get("result", "")
+    if "SQLQuery:" in result1:  # Check if SQLQuery exists in the result string
+        # Split the result at 'SQLQuery:' and get the second part (the query itself)
+        sql_query = result1.split("SQLQuery:")[1].strip()  # Split and remove any extra spaces
+        print("Extracted SQL Query:", sql_query)
+
+    return result, few_shot_prompt
 
 async def delete_query_sql():
     try:

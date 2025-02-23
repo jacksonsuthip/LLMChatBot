@@ -1,0 +1,32 @@
+metadata = [
+  {
+    "Question": "List services",
+    "SQLQuery": "SELECT service_name FROM cost GROUP BY service_name;",
+    "SQLResult": "Result of the SQL query",
+    "Answer": "[('db.m5.large',), ('aws-lambda-xyz',), ('ddb-table-prod',), ('t2.micro',), ('StandardStorage',)]"
+  },
+  {
+    "Question": "What is the performance of t2.micro?",
+    "SQLQuery": "SELECT service_name, cpu_usage, memory_usage, response_time FROM performance WHERE service_name = 't2.micro';",
+    "SQLResult": "Result of the SQL query",
+    "Answer": "0.1"
+  },
+  {
+    "Question": "What is the recommendation for db.m5.large?",
+    "SQLQuery": "SELECT * FROM recommendation WHERE service_name = 'db.m5.large';",
+    "SQLResult": "Result of the SQL query",
+    "Answer": "t2"
+  },
+  {
+    "Question": "What is the CPU performance of aws-lambda-xyz?",
+    "SQLQuery": "SELECT service_name, cpu_usage FROM performance WHERE service_name = 'aws-lambda-xyz';",
+    "SQLResult": "Result of the SQL query",
+    "Answer": "5%"
+  },
+  {
+    "Question": "what is the performance of db.m5.large on 19th Jan",
+    "SQLQuery": "SELECT * FROM performance WHERE service_name = 'db.m5.large' AND performance_date = '2025-01-19';",
+    "SQLResult": "Result of the SQL query",
+    "Answer": "10%"
+  }
+]
